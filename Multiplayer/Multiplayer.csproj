@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{380A0880-1CE8-4856-A229-FB3EC257D2A9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Multiplayer</RootNamespace>
+    <AssemblyName>Multiplayer</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\KSP_VANILLA\KSP_win\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\KSP_VANILLA\KSP_win\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network">
+      <HintPath>..\..\Lidgren-network-gen3\Lidgren.Network\bin\Debug\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="KerbalData">
+      <HintPath>..\..\kerbaldata\bin\KerbalData.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\kerbaldata\bin\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NAnt.Core">
+      <HintPath>..\..\kerbaldata\bin\NAnt.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\kerbaldata\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Dynamic" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Multiplayer.cs" />
+    <Compile Include="MultiplayerClient.cs" />
+    <Compile Include="ConfigFile.cs" />
+    <Compile Include="DiffMatchPatch.cs" />
+    <Compile Include="NetworkedFileUpdate.cs" />
+    <Compile Include="TransferLogic.cs" />
+  </ItemGroup>
+</Project>
