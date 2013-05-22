@@ -67,5 +67,7 @@
     <Compile Include="DiffMatchPatch.cs" />
     <Compile Include="NetworkedFileUpdate.cs" />
     <Compile Include="TransferLogic.cs" />
+    <Compile Include="ConnectWindow.cs" />
+    <Compile Include="Window.cs" />
   </ItemGroup>
 </Project>

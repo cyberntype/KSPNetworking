@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using DiffMatchPatch;
 
-namespace FileSynch
+namespace Multiplayer
 {
 	public class NetworkedFileUpdate
 	{		

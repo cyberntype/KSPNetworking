@@ -14,7 +14,6 @@ using Lidgren.Network;
 using System.Diagnostics;
 using KerbalData.Models;
 using System.Text.RegularExpressions;
-using FileSynch;
 
 namespace Multiplayer {
 
@@ -52,6 +51,7 @@ namespace Multiplayer {
 		private String playerName;
 		private Multiplayer user;
 		private string taskSplit;
+
 
 		private enum MessageChannel{ FILE=1, UPDATE, CHAT, VESSEL };
 		
@@ -158,10 +158,21 @@ namespace Multiplayer {
 						try{
 							int messageType = (int)msg.ReadByte();
 							if (((MessageType)messageType) == MessageType.File) {
-								TransferLogic logic = TransferLogic.instantiateTransfer( TransferLogic.getFileInfo( msg ) );
+								string[] gameInfo = TransferLogic.getFileInfo( msg ); //sets msg cursor at files contents
+								TransferLogic logic = TransferLogic.instantiateTransfer( gameInfo );
+								TransferLogic.createGameStructure( gameInfo[1] );
+								user.CurrentGame = gameInfo[1];
 								if( logic != null ) {
-									byte[] contents = msg.ReadBytes(logic.Length);
-									logic.Wr
+									byte[] contents = msg.ReadBytes(logic.length);
+									logic.writeFile( contents );
+									logic.copyToGameFile();
+								}
+							} else if (((MessageType)messageType) == MessageType.FileUpdate){
+								string length = TransferLogic.getNextPart( msg );
+								int len;
+								if(int.TryParse( length, out len )) {
+									TransferLogic logic = new TransferLogic( "persistent.sfs", user.CurrentGame, FileType.PERSISTENT, len);
+									logic.readSaveUpdate( msg );
 								}
 							}
 

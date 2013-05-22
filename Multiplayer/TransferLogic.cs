@@ -6,26 +6,26 @@ using Lidgren.Network;
 using DiffMatchPatch;
 using System.Text;
 
-namespace FileSynch
+namespace Multiplayer
 {
 	public enum FileType { PERSISTENT=1, QUICKSAVE, VAB_CRAFT, SPH_CRAFT };
 
 	public class TransferLogic
 	{
 		private const int BYTE_READ = 16;
-		private const byte COUNT_DELIMITER = 58;
-		private const byte DIFF_DELIMITER = 59;
-		private const byte INFO_DELIMITER = 124;
+		private const byte COUNT_DELIMITER = 58; //:
+		private const byte DIFF_DELIMITER = 59; //;
+		private const byte INFO_DELIMITER = 124; //|
 		private const int FETCHSIZE = 15;
 		public const int LOWESTBYTES = 4096;
 		public const string PLUGINSAVE = "PluginData/KSPMultiplayer/";
 
-		private string gameFileName;
-		private string gameFolderName;
-		private FileType fileType;
-		private string fullPath;
-		private string gamePath;
-		private int length;
+		public string gameFileName;
+		public string gameFolderName;
+		public FileType fileType;
+		public string fullPath;
+		public string gamePath;
+		public int length;
 
 		public int Length { get; set; }
 
@@ -246,7 +246,7 @@ namespace FileSynch
 			}
 		}
 
-		private static string getNextPart( NetIncomingMessage msg) {
+		public static string getNextPart( NetIncomingMessage msg) {
 			string part = String.Empty;
 			string convert = String.Empty;
 			int bytesRead = 0;
@@ -338,24 +338,27 @@ namespace FileSynch
 			}
 			string fileName = parts [0];
 			string gameFolder = parts [1];
-			int.TryParse (parts [2], length);
+			int fileLength;
+			if( int.TryParse (parts [2], out fileLength) ) {
+				FileType type;
+				if (fileName.IndexOf ("SPH") > -1) {
+					type = FileType.SPH_CRAFT;
+					fileName = fileName.Substring(fileName.IndexOf("/") + 1 );
+				} else if (fileName.IndexOf ("persistent") > -1) {
+					type = FileType.PERSISTENT;
+				} else if (fileName.IndexOf ("quicksave") > -1) {
+					type = FileType.QUICKSAVE;
+				} else {
+					type = FileType.VAB_CRAFT;
+					fileName = fileName.Substring(fileName.IndexOf("/") + 1 );
+				}
 
-			FileType type;
-			if (fileName.IndexOf ("SPH") > -1) {
-				type = FileType.SPH_CRAFT;
-				fileName = fileName.Substring(fileName.IndexOf("/") + 1 );
-			} else if (fileName.IndexOf ("persistent") > -1) {
-				type = FileType.PERSISTENT;
-			} else if (fileName.IndexOf ("quicksave") > -1) {
-				type = FileType.QUICKSAVE;
-			} else {
-				type = FileType.VAB_CRAFT;
-				fileName = fileName.Substring(fileName.IndexOf("/") + 1 );
+				TransferLogic logic = new TransferLogic (fileName, gameFolder, type, fileLength);
+				TransferLogic.createGameStructure (gameFolder);
+				return logic;
 			}
 
-			TransferLogic logic = new TransferLogic (fileName, gameFolder, length, type);
-			TransferLogic.createGameStructure (gameFolder);
-			return logic;
+			return null;
 		}
 	}
 }

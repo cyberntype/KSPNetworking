@@ -55,6 +55,9 @@ namespace Multiplayer
 		public readonly object _chatLock = new object();
 		public readonly object _dataLock = new object();
 
+		private volatile string currentGame;
+		public string CurrentGame { get; set; }
+
 		public void Start()
 		{
 			chatMessages = new Queue<string> (MAX_CHAT_SIZE);
